@@ -22,7 +22,7 @@
       "type": "Serial"
     },
     "Socket": {
-      "server": "192.168.x.x",
+      "server": "192.168.123.136",
       "port": 8899
     },
     "SocketDevice": {
@@ -36,17 +36,17 @@
     },
     "MQTT": {
       "anonymous": false,
-      "server": "192.168.x.x",
-      "username": "id",
-      "password": "pw"
+      "server": "192.168.123.135",
+      "username": "mqtt",
+      "password": "jihong7796"
     },
     "Wallpad": {
-      "light": false,
+      "light": true,
       "plug": false,
-      "thermostat": false,
-      "fan": false,
-      "gas": false,
-      "elevator": false
+      "thermostat": true,
+      "fan": true,
+      "gas": true,
+      "elevator": true
     },
     "Advanced": {
       "INIT_TEMP": 22,
@@ -66,21 +66,21 @@
       },
       {
         "name": "room1",
-        "number": 2
+        "number": 1
       },
       {
         "name": "room2",
-        "number": 2
+        "number": 1
       },
       {
         "name": "kitchen",
-        "number": 3
+        "number": 2
       }
     ],
     "KOCOM_PLUG_SIZE": [
       {
         "name": "livingroom",
-        "number": 3
+        "number": 2
       },
       {
         "name": "bedroom",
@@ -96,7 +96,7 @@
       },
       {
         "name": "kitchen",
-        "number": 3
+        "number": 2
       }
     ],
     "KOCOM_ROOM": [
