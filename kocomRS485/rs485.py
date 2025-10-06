@@ -615,36 +615,6 @@ class Kocom(rs485):
             subscribe_list.append((ha_topic, 0))
             #subscribe_list.append((ha_payload['stat_t'], 0))
             publish_list.append({ha_topic : json.dumps(ha_payload)})
-
-            if dev == 'fan':
-        topic = 'homeassistant/fan/kocom_wallpad_fan/config'
-        payload = {
-            'name': 'Kocom Wallpad Fan',
-            'cmd_t': 'kocom/livingroom/fan/command',
-            'stat_t': 'kocom/livingroom/fan/state',
-            'stat_val_tpl': '{{ value_json.state }}',
-            'pr_mode_stat_t': 'kocom/livingroom/fan/state',
-            'pr_mode_val_tpl': '{{ value_json.preset }}',
-            'pr_mode_cmd_t': 'kocom/livingroom/fan/set_preset_mode/command',
-            'pr_mode_cmd_tpl': '{{ value }}',
-            'pr_modes': ['Off', 'Low', 'Medium', 'High'],
-            'pl_on': 'on',
-            'pl_off': 'off',
-            'qos': 0,
-            'uniq_id': '{}_{}_{}'.format('kocom', 'wallpad', dev),
-            'device': {
-                'name': '코콤 스마트 월패드',
-                'ids': 'kocom_smart_wallpad',
-                'mf': 'KOCOM',
-                'mdl': '스마트 월패드',
-                'sw': SW_VERSION
-            }
-        }
-        logtxt='[MQTT Discovery|{}] data[{}]'.format(dev, topic)
-        mqttc.publish(topic, json.dumps(payload))
-        if logtxt != "" and config.get('Log', 'show_mqtt_publish') == 'True':
-            logging.info(logtxt)
-            
         if self.wp_fan:
             ha_topic = '{}/{}/{}_{}/config'.format(HA_PREFIX, HA_FAN, 'wallpad', DEVICE_FAN)
             ha_payload = {
