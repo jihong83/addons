@@ -4,7 +4,7 @@
 
 
 
-애드온 스토어에서 Repository URL을 `https://github.com/HAKorea/addons` 으로 입력하고 애드온을 추가하세요.
+애드온 스토어에서 Repository URL을 `https://github.com/jihong83/addons` 으로 입력하고 애드온을 추가하세요.
 
 
 
