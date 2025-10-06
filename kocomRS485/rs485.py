@@ -112,7 +112,7 @@ DEVICE_FAN = 'fan'
 KOCOM_DEVICE                = {'01': DEVICE_WALLPAD, '0e': DEVICE_LIGHT, '36': DEVICE_THERMOSTAT, '3b': DEVICE_PLUG, '44': DEVICE_ELEVATOR, '2c': DEVICE_GAS, '48': DEVICE_FAN}
 KOCOM_COMMAND               = {'3a': '조회', '00': '상태', '01': 'on', '02': 'off'}
 KOCOM_TYPE                  = {'30b': 'send', '30d': 'ack'}
-KOCOM_FAN_SPEED             = {'4': '1', '8': '2', 'c': '3', '0': '0'}
+KOCOM_FAN_SPEED = {'4': 'low', '8': 'medium', 'c': 'high', '0': 'off'}
 KOCOM_DEVICE_REV            = {v: k for k, v in KOCOM_DEVICE.items()}
 KOCOM_ROOM_REV              = {v: k for k, v in KOCOM_ROOM.items()}
 KOCOM_ROOM_THERMOSTAT_REV   = {v: k for k, v in KOCOM_ROOM_THERMOSTAT.items()}
@@ -500,7 +500,7 @@ class Kocom(rs485):
                     self.wp_list[device][room]['speed']['set'] = payload
                     self.wp_list[device][room]['mode']['set'] = 'on'
                 elif command == 'mode':
-                    self.wp_list[device][room]['speed']['set'] = DEFAULT_SPEED if payload == 'on' else '0'
+                    self.wp_list[device][room]['speed']['set'] = DEFAULT_SPEED if payload == 'on' else 'off'
                     self.wp_list[device][room]['mode']['set'] = payload
                 self.wp_list[device][room]['speed']['last'] = 'set'
                 self.wp_list[device][room]['mode']['last'] = 'set'
@@ -621,14 +621,13 @@ class Kocom(rs485):
                 'name': '{}_{}_{}'.format(self._name, 'wallpad', DEVICE_FAN),
                 'cmd_t': '{}/{}/{}/mode'.format(HA_PREFIX, HA_FAN, 'wallpad'),
                 'stat_t': '{}/{}/{}/state'.format(HA_PREFIX, HA_FAN, 'wallpad'),
-                'pct_cmd_t': '{}/{}/{}/speed'.format(HA_PREFIX, HA_FAN, 'wallpad'),
-                'pct_stat_t': '{}/{}/{}/state'.format(HA_PREFIX, HA_FAN, 'wallpad'),
+                'pr_mode_cmd_t': '{}/{}/{}/speed'.format(HA_PREFIX, HA_FAN, 'wallpad'),
+                'pr_mode_stat_t': '{}/{}/{}/state'.format(HA_PREFIX, HA_FAN, 'wallpad'),
                 'stat_val_tpl': '{{ value_json.mode }}',
-                'pct_val_tpl': '{{ value_json.speed }}',
+                'pr_mode_val_tpl': '{{ value_json.speed }}',
                 'pl_on': 'on',
                 'pl_off': 'off',
-                'spd_rng_max':3,
-                'spd_rng_min':1,
+                'pr_modes': ['low', 'medium', 'high', 'off'],
                 'uniq_id': '{}_{}_{}'.format(self._name, 'wallpad', DEVICE_FAN),
                 'device': {
                     'name': 'Kocom {}'.format('wallpad'),
@@ -1189,14 +1188,13 @@ class Grex:
             'name': '{}_{}'.format(self._name, DEVICE_FAN),
             'cmd_t': '{}/{}/{}/mode'.format(HA_PREFIX, HA_FAN, 'grex'),
             'stat_t': '{}/{}/{}/state'.format(HA_PREFIX, HA_FAN, 'grex'),
-            'pct_cmd_t': '{}/{}/{}/speed'.format(HA_PREFIX, HA_FAN, 'grex'),
-            'pct_stat_t': '{}/{}/{}/state'.format(HA_PREFIX, HA_FAN, 'grex'),
+            'pr_mode_cmd_t': '{}/{}/{}/speed'.format(HA_PREFIX, HA_FAN, 'grex'),
+            'pr_mode_stat_t': '{}/{}/{}/state'.format(HA_PREFIX, HA_FAN, 'grex'),
             'stat_val_tpl': '{{ value_json.mode }}',
-            'pct_val_tpl': '{{ value_json.speed }}',
+            'pr_mode_val_tpl': '{{ value_json.speed }}',
             'pl_on': 'on',
             'pl_off': 'off',
-            'spd_rng_max':3,
-            'spd_rng_min':1,
+            'pr_modes': ['low', 'medium', 'high', 'off'],
             'uniq_id': '{}_{}_{}'.format(self._name, 'grex', DEVICE_FAN),
             'device': {
                 'name': 'Grex Ventilator',
@@ -1531,7 +1529,6 @@ if __name__ == '__main__':
         elif r._type == 'socket':
             _name = r._device
             if _name == 'kocom':
-                DEFAULT_SPEED = str(['off', 'low', 'medium', 'high'].index(DEFAULT_SPEED))
                 kocom = Kocom(r, _name, _name, 42)
                 if not kocom.connection_lost():
                     logger.info('[ERROR] 서버 연결이 끊어져 1분 후 재접속을 시도합니다.')
