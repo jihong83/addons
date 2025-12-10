@@ -44,7 +44,7 @@
       "light": true,
       "plug": false,
       "thermostat": true,
-      "fan": true,
+      "fan": false,
       "gas": true,
       "elevator": true
     },
